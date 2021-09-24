@@ -1,31 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Bearing Condition Level - Random Forrest Classifier</title>
-</head>
-<body>
-    <h1>Klasifikasi Level Kerusakan Bearing dengan Random Forrest Classifier</h1>
-    <form action="{{url_for('predict')}}" method="post">
-        <label>Masukkan data, data dipisahkan oleh spasi, koma, atau per baris.</label><br/><a href="/data" target="_blank">Klik di sini untuk melihat contoh data</a><br/>
-        <textarea name="var1" rows="4" cols="60"></textarea><br/>
-        <input type="submit" value="Prediksi">
-    </form>
-    <h2>Hasil Prediksi:</h3>
-    <p>Prediksi per 500 data dengan step 25: {{prediksi}}</p>   
-    <h3>Prediksi terbanyak</h3>
-    <p>{{percen}}</p>
-    {% for xx in percen %}
-    <li>Level {{percen[percen==xx].index[0][0]}} -- Probabilitas = {{"{:.2f}".format(xx)}} %</li>
-    {% endfor %}
-    <p><b>Keterangan:</b> 0=Normal, 1=kurang 1 bola, 2=kurang 2 bola, 3=kurang 3 bola, 4=kurang 4 bola</p>
-    <p>
-    {% if result != None %}
-    <img src="{{ result }}" width=100%>
-    {% endif %}
-    </p>
-    <!--<h2>Normalise data array:</h2>
-    <p>{{hasil}}</p>-->
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+            rel="stylesheet"
+        />
+        <title>Aplikasi Prediksi Kerusakan Bearing Dengan Random Forest Classifier</title>
+    </head>
+    <body
+        class="
+            flex flex-col
+            justify-between
+            item-center
+            p-8
+            min-h-screen
+            bg-gradient-to-r
+            from-green-400
+            to-blue-500
+            text-gray-800
+            md:flex-row
+        "
+    >
+        <main class="bg-white p-16 rounded-lg">
+            <h1 style="font-size:30px"><b>Prediksi Kerusakan Bearing/Bantalan:</b> </h1>
+            <p style="font-family: times, serif; font-size:12pt; font-style:italic">Kreator:<br/> Indra Agustian (Universitas Bengkulu)<br/> Afit Miranto (Institut Teknologi Sumatera)<br/> Arnita Irianti (Universitas Sulawesi Barat)</p><br/>
 
-</body>
-</html> 
+            <form
+                action="{{ url_for('predict') }}"
+                method="post"
+                class="flex flex-col"
+            >
+            <label for="data" class="mb-2">Masukkan data resultan akselerometer:</label>
+            <textarea name="var1" class="p-4 bg-gray-100 rounded-md" rows="5" placeholder="Minimal 500 data, delay maks per data 0.01s, dipisahkan oleh spasi, koma, atau per baris."></textarea>
+            <a href="/data" target="_blank" style="color:#0D31BF;">Klik di sini untuk melihat contoh data</a>
+
+               <button
+                    type="submit"
+                    class="
+                        flex
+                        justify-center
+                        align-center
+                        mt-8
+                        p-4
+                        bg-gradient-to-r
+                        from-green-400
+                        to-blue-500
+                        text-white
+                        rounded-md
+                    "
+                >
+                    PREDIKSI SEKARANG
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="feather feather-arrow-right ml-4"
+                    >
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </button>
+            </form>
+            <div class="mt-8">
+                {% if result != None %}
+                <p>Grafik getaran dengan normalisasi StandardScaler:</p>
+                <img src="{{ result }}" width=500px>
+                {% endif %}
+            </div>
+
+        </main>
+
+        <section class="mt-8 h-full flex-auto rounded-lg md:mt-0 md:ml-8">
+            <div class="bg-white p-16 rounded-lg">
+                <h1 style="font-size:30px"><b>Hasil Prediksi:</b> </h1>
+                <h4><b>
+                {% for xx in percen %}
+                    <li>Level {{percen[percen==xx].index[0][0]}}, Probabilitas = {{"{:.2f}".format(xx)}} %</li>
+                {% endfor %}</b>
+                </h4>
+                <div class="mt-8">
+                    <p>Detail prediksi per 500 data dengan step 25:<br/> {{prediksi}}</p> 
+                    <p><b>Keterangan:</b><br/> 0=Normal<br/> 1=kurang 1 bola<br/> 2=kurang 2 bola<br/> 3=kurang 3 bola<br/> 4=kurang 4 bola</p>
+                </div>
+
+                
+            </div>
+            <div class="flex justify-around bg-white p-16 rounded-lg mt-8">
+                <img
+                    class="h-24 md:h-28"
+                    src="https://digitalent.kominfo.go.id/assets/@images/logo.png"
+                    alt="logo-dts"
+                />
+                <img
+                    class="h-24 md:h-28"
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Logo_of_Ministry_of_Communication_and_Information_Technology_of_the_Republic_of_Indonesia.svg/604px-Logo_of_Ministry_of_Communication_and_Information_Technology_of_the_Republic_of_Indonesia.svg.png"
+                    alt="logo-kominfo"
+                />
+            </div>
+        </section>
+    </body>
+</html>

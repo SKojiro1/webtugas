@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return render_template('home.html',hasil=0)
+    return render_template('home.html')
 
 @app.route('/data')
 def contoh():
@@ -24,7 +24,11 @@ def predict():
     result=plot_png()
     prediksi=prediction()[0]
     percen=prediction()[1]
-    return render_template('home.html', hasil=getdata(), result=result, prediksi=prediksi, percen=percen) 
+    return render_template('home.html', result=result, prediksi=prediksi, percen=percen) 
+
+@app.errorhandler(Exception)
+def all_exception_handler(error):
+   return 'Maaf, silahkan coba lagi, mohon diperhatikan bahwa data harus berupa integer/float, minimal 500 data, dipisahkan oleh spasi, koma, atau per baris, silahkan lihat contoh data. Jika masih terjadi kesalahan silahkan kontak via email: indraunib@gmail.com ', 500
 
 def prediction():
     return prd.prediction(getdata())
