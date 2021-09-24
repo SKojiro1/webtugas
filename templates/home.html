@@ -2,19 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Penjumlahan</title>
+    <title>Bearing Condition Level - Random Forrest Classifier</title>
 </head>
 <body>
-    <h1>Tes Input Data Sensor</h1>
+    <h1>Klasifikasi Level Kerusakan Bearing dengan Random Forrest Classifier</h1>
     <form action="{{url_for('predict')}}" method="post">
-        <label>data</label><br/>
-        <textarea name="var1" rows="4" cols="50"></textarea>
-        <input type="submit" value="Submit">
+        <label>Masukkan data, data dipisahkan oleh spasi, koma, atau per baris.</label><br/><a href="/data" target="_blank">Klik di sini untuk melihat contoh data</a><br/>
+        <textarea name="var1" rows="4" cols="60"></textarea><br/>
+        <input type="submit" value="Prediksi">
     </form>
-        <h1>array:</h1>
-        <h4>{{hasil}}</h4>
-        <!--<h4>{{result}}</h4>-->
-        <h4><img src={{result}}></h4>
+    <h2>Hasil Prediksi:</h3>
+    <p>Prediksi per 500 data dengan step 25: {{prediksi}}</p>   
+    <h3>Prediksi terbanyak</h3>
+    <p>{{percen}}</p>
+    {% for xx in percen %}
+    <li>Level {{percen[percen==xx].index[0][0]}} -- Probabilitas = {{"{:.2f}".format(xx)}} %</li>
+    {% endfor %}
+    <p><b>Keterangan:</b> 0=Normal, 1=kurang 1 bola, 2=kurang 2 bola, 3=kurang 3 bola, 4=kurang 4 bola</p>
+    <p>
+    {% if result != None %}
+    <img src="{{ result }}" width=100%>
+    {% endif %}
+    </p>
+    <!--<h2>Normalise data array:</h2>
+    <p>{{hasil}}</p>-->
 
 </body>
 </html> 
